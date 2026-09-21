@@ -1,0 +1,47 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+const items = (await getCollection('materials'))
+  .filter((m) => !m.data.draft)
+  .sort((a, b) => a.data.title.localeCompare(b.data.title, 'ar'));
+const kinds = Array.from(new Set(items.map((m) => m.data.kind).filter(Boolean)));
+---
+<Base title="مواد الخدمة">
+  <section class="container">
+    <div class="section-head"><h2>مواد الخدمة</h2></div>
+    <p class="lead">ترانيم، ألعاب، مسرحيات، برامج، بامفلت — استخدم الفلاتر للتصفية.</p>
+
+    <div class="filters" id="filters">
+      <button class="active" data-kind="all">الكل</button>
+      {kinds.map((k) => <button data-kind={k}>{k}</button>)}
+    </div>
+
+    <div class="grid" id="mat-grid">
+      {items.map((m) => (
+        <a class="card" href={`/materials/${m.slug}`} data-kind={m.data.kind || 'أخرى'}>
+          {m.data.cover ? (
+            <div class="card-media" style={`background-image:url(${m.data.cover})`}></div>
+          ) : (
+            <div class="card-fallback"><span class="chip" style="background:transparent;color:#e6c455">{m.data.kind || 'مادة'}</span></div>
+          )}
+          <div class="card-body">
+            <h3>{m.data.title}</h3>
+            {m.data.kind && <span class="card-meta">{m.data.kind}</span>}
+          </div>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <script is:inline>
+    const btns = document.querySelectorAll('#filters button');
+    const cards = document.querySelectorAll('#mat-grid .card');
+    btns.forEach((b) => b.addEventListener('click', () => {
+      btns.forEach((x) => x.classList.remove('active'));
+      b.classList.add('active');
+      const k = b.dataset.kind;
+      cards.forEach((c) => { c.style.display = (k === 'all' || c.dataset.kind === k) ? '' : 'none'; });
+    }));
+  </script>
+</Base>

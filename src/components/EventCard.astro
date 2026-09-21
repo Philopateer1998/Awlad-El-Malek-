@@ -1,0 +1,27 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  type: string;
+  year?: number;
+  cover?: string;
+}
+const { href, title, type, year, cover } = Astro.props;
+const isCarnival = type === 'كرنفال';
+---
+<a class="card" href={href}>
+  {cover ? (
+    <div class="card-media" style={`background-image:url(${cover})`}>
+      <span class="badge">{type}</span>
+    </div>
+  ) : (
+    <div class={`card-fallback${isCarnival ? ' carnival' : ''}`}>
+      <span class="badge">{type}</span>
+      {year && <div class="yr">{year}</div>}
+    </div>
+  )}
+  <div class="card-body">
+    <h3>{title}</h3>
+    {year && <span class="card-meta">سنة {year}</span>}
+  </div>
+</a>

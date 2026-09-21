@@ -1,0 +1,27 @@
+---
+const links = [
+  { href: '/', label: 'الرئيسية' },
+  { href: '/conferences', label: 'المؤتمرات' },
+  { href: '/carnivals', label: 'الكرنفالات' },
+  { href: '/visitation', label: 'الافتقاد' },
+  { href: '/materials', label: 'مواد الخدمة' },
+  { href: '/charter', label: 'لائحة الخدمة' },
+  { href: '/about', label: 'عن الخدمة' },
+];
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+<header class="site-header">
+  <div class="container nav">
+    <a class="brand" href="/">
+      <img src="/img/logo.jpg" alt="شعار ولاد الملك" />
+      <span>ولاد الملك</span>
+    </a>
+    <button class="menu-toggle" aria-label="القائمة" onclick="document.getElementById('navlinks').classList.toggle('open')">☰</button>
+    <nav id="navlinks" class="nav-links">
+      {links.map((l) => (
+        <a href={l.href} aria-current={path === l.href ? 'page' : undefined}>{l.label}</a>
+      ))}
+      <a class="nav-cta" href="/booking">حجز مؤتمرات</a>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,21 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import EventCard from '../../components/EventCard.astro';
+
+const items = (await getCollection('events'))
+  .filter((e) => !e.data.draft && e.data.type === 'مؤتمر')
+  .sort((a, b) => (b.data.year ?? 0) - (a.data.year ?? 0));
+---
+<Base title="المؤتمرات">
+  <section class="container">
+    <div class="section-head"><h2>المؤتمرات</h2></div>
+    <p class="lead">مؤتمرات الأطفال خلال شهور الصيف — كل مؤتمر ٣ أيام كاملة في بيوت خدمة الأنبا إبرآم.</p>
+    <div class="grid" style="margin-top:24px">
+      {items.map((e) => (
+        <EventCard href={`/events/${e.slug}`} title={e.data.title} type={e.data.type} year={e.data.year} cover={e.data.cover} />
+      ))}
+    </div>
+    {items.length === 0 && <p class="empty">لا توجد مؤتمرات بعد.</p>}
+  </section>
+</Base>

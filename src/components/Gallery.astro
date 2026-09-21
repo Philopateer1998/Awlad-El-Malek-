@@ -1,0 +1,11 @@
+---
+interface Props { images: string[]; }
+const { images } = Astro.props;
+---
+{images && images.length > 0 && (
+  <div class="gallery">
+    {images.map((src) => (
+      <a href={src} target="_blank" rel="noopener"><img src={src} alt="" loading="lazy" /></a>
+    ))}
+  </div>
+)}

@@ -1,0 +1,55 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import EventCard from '../components/EventCard.astro';
+
+const events = (await getCollection('events')).filter((e) => !e.data.draft);
+const byYear = (a, b) => (b.data.year ?? 0) - (a.data.year ?? 0);
+const conferences = events.filter((e) => e.data.type === 'مؤتمر').sort(byYear).slice(0, 6);
+const carnivals = events.filter((e) => e.data.type === 'كرنفال').sort(byYear).slice(0, 6);
+const materialsCount = (await getCollection('materials')).filter((m) => !m.data.draft).length;
+---
+<Base>
+  <section class="hero" style="--hero:url(/img/hero.jpg); padding-block:96px;">
+    <div class="container">
+      <h1>خدمة أولاد الملك</h1>
+      <p>مؤتمرات وكرنفالات وافتقاد لأطفال الأنبا إبرآم للتنمية — نقرّب كل طفل من المسيح بالفرح والخدمة.</p>
+      <div class="btns">
+        <a class="btn btn-gold" href="/booking">لمعرفة طريقة التحضير + التزكية + الحجز</a>
+        <a class="btn btn-outline" href="/about">عن الخدمة</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="container">
+    <div class="section-head">
+      <h2>أحدث المؤتمرات</h2>
+      <a href="/conferences">كل المؤتمرات ←</a>
+    </div>
+    <div class="grid">
+      {conferences.map((e) => (
+        <EventCard href={`/events/${e.slug}`} title={e.data.title} type={e.data.type} year={e.data.year} cover={e.data.cover} />
+      ))}
+    </div>
+  </section>
+
+  <section class="container" style="padding-top:0">
+    <div class="section-head">
+      <h2>أحدث الكرنفالات</h2>
+      <a href="/carnivals">كل الكرنفالات ←</a>
+    </div>
+    <div class="grid">
+      {carnivals.map((e) => (
+        <EventCard href={`/events/${e.slug}`} title={e.data.title} type={e.data.type} year={e.data.year} cover={e.data.cover} />
+      ))}
+    </div>
+  </section>
+
+  <section class="container" style="padding-top:0">
+    <div class="section-head">
+      <h2>مواد الخدمة</h2>
+      <a href="/materials">تصفّح الكل ←</a>
+    </div>
+    <p class="lead">أكثر من {materialsCount} مادة: ترانيم، ألعاب، مسرحيات، برامج، وبامفلت الخدام — جاهزة للاستخدام في المؤتمرات والكرنفالات.</p>
+  </section>
+</Base>
