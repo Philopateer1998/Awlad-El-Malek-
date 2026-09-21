@@ -1,0 +1,66 @@
+# إعداد لوحة التحكم (Sveltia CMS — متوافق مع Decap)
+# 1) غيّر OWNER/REPO لاسم مستودعك على GitHub بعد الرفع.
+# 2) للتعديل محليًا: شغّل  npx @sveltia/cms-proxy-server  ثم افتح http://localhost:4321/admin/
+backend:
+  name: github
+  repo: OWNER/REPO
+  branch: main
+
+# يسمح بالتعديل محليًا بدون تسجيل دخول (مع تشغيل الـ proxy server)
+local_backend: true
+
+media_folder: "public/img"   # مكان حفظ الصور داخل المستودع
+public_folder: "/img"        # مسار الصور في الموقع
+
+locale: ar
+
+collections:
+  - name: events
+    label: "المؤتمرات والكرنفالات"
+    label_singular: "حدث"
+    folder: "src/content/events"
+    extension: "md"
+    format: "yaml-frontmatter"
+    create: true
+    slug: "{{year}}-{{slug}}"
+    summary: "{{title}} ({{year}})"
+    fields:
+      - { name: title, label: "العنوان", widget: string }
+      - { name: type, label: "النوع", widget: select, options: ["مؤتمر", "كرنفال"], default: "مؤتمر" }
+      - { name: year, label: "السنة", widget: number, value_type: int, required: false, min: 2000, max: 2100 }
+      - { name: cover, label: "صورة الغلاف", widget: image, required: false }
+      - { name: gallery, label: "معرض الصور", widget: list, required: false, field: { name: image, label: "صورة", widget: image } }
+      - { name: draft, label: "مسودة (غير منشور)", widget: boolean, default: false }
+      - { name: body, label: "المحتوى", widget: markdown, required: false }
+
+  - name: materials
+    label: "مواد الخدمة"
+    label_singular: "مادة"
+    folder: "src/content/materials"
+    extension: "md"
+    format: "yaml-frontmatter"
+    create: true
+    summary: "{{title}}"
+    fields:
+      - { name: title, label: "العنوان", widget: string }
+      - { name: kind, label: "النوع", widget: select, required: false, options: ["ترانيم", "ألعاب", "مسرحية", "برنامج", "بامفلت", "منهج", "فقرة", "أخرى"] }
+      - { name: year, label: "السنة", widget: number, value_type: int, required: false }
+      - { name: cover, label: "صورة الغلاف", widget: image, required: false }
+      - { name: gallery, label: "معرض الصور", widget: list, required: false, field: { name: image, label: "صورة", widget: image } }
+      - { name: draft, label: "مسودة (غير منشور)", widget: boolean, default: false }
+      - { name: body, label: "المحتوى", widget: markdown, required: false }
+
+  - name: pages
+    label: "الصفحات الثابتة"
+    label_singular: "صفحة"
+    folder: "src/content/pages"
+    extension: "md"
+    format: "yaml-frontmatter"
+    create: true
+    summary: "{{title}}"
+    fields:
+      - { name: title, label: "العنوان", widget: string }
+      - { name: cover, label: "صورة الغلاف", widget: image, required: false }
+      - { name: gallery, label: "معرض الصور", widget: list, required: false, field: { name: image, label: "صورة", widget: image } }
+      - { name: draft, label: "مسودة (غير منشور)", widget: boolean, default: false }
+      - { name: body, label: "المحتوى", widget: markdown, required: false }
