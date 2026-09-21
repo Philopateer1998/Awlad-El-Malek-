@@ -3,7 +3,7 @@
 # 2) للتعديل محليًا: شغّل  npx @sveltia/cms-proxy-server  ثم افتح http://localhost:4321/admin/
 backend:
   name: github
-  repo: OWNER/REPO
+  repo: Philopateer1998/Awlad-El-Malek-
   branch: main
 
 # يسمح بالتعديل محليًا بدون تسجيل دخول (مع تشغيل الـ proxy server)
